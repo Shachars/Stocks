@@ -11,11 +11,13 @@
 clear all;
 %% Get data
 % data_file = 'stocks_data_full';
-data_file = 'stocks_data7';
+% data_file = 'stocks_data7_with_ta100';
+data_file = 'stocks_data18';
+% data_file = 'stocks_data11_with_ta100';
 data = load(data_file);
 stock_return = data.stock_return;
 Nstocks = data.Nstocks;
-N_mc = 1e5;
+N_mc = 1;%1e5;
 
 
 %% find the overlap between the stocks data sets
@@ -38,10 +40,10 @@ cov_stocks_mat = zeros(Nstocks);
 for i=1:N_mc
     for iStock=1:Nstocks
         for jStock=iStock:Nstocks
-            a = overlap_len(iStock,jStock)*rand;
-            b = overlap_len(iStock,jStock)*rand;
-% a = 1;
-%             b = overlap_len(iStock,jStock);
+%             a = overlap_len(iStock,jStock)*rand;
+%             b = overlap_len(iStock,jStock)*rand;
+            a = 1;
+            b = overlap_len(iStock,jStock);
             rand_start = fix(max(a,b)); % since we use the end
             rand_stop = fix(min(a,b));
             len = rand_start - rand_stop + 1;
@@ -49,8 +51,8 @@ for i=1:N_mc
                 continue;
             end
 
-            stock1 = stock_return{iStock}(end-rand_start:end-rand_stop);
-            stock2 = stock_return{jStock}(end-rand_start:end-rand_stop);
+            stock1 = stock_return{iStock}(end-rand_start+1:end-rand_stop-1);
+            stock2 = stock_return{jStock}(end-rand_start+1:end-rand_stop-1);
             
             cov_stocks_mat(iStock,jStock) = sum((stock1-mean(stock1)).*(stock2-mean(stock2)))/(len-1);
             cov_stocks_mat(jStock,iStock) = cov_stocks_mat(iStock,jStock);
@@ -64,7 +66,7 @@ for i=1:N_mc
 end
 
 C = C/N_mc;
-mu_stocks = mean(mu_stocks1);
+mu_stocks = mu_stocks1;
 % figure;hist(mu_stocks1(:,8),100)
 
 %% check the distribution of the returns and risks of each of the portfolios
@@ -83,7 +85,7 @@ return_max_sharpe = (mu_stocks*w_max_sharpe.')
 std_max_sharpe = sqrt(w_max_sharpe*C*w_max_sharpe.')
 
 %% Compute the annual return for each portfolio
-N = 10000;
+N = 1e6;
 z = zeros(1,N);
 risk = [std_min_risk,std_max_sharpe];
 return_monthly = [return_min_risk,return_max_sharpe];
@@ -92,18 +94,17 @@ for j=1:2
     mean_return = mean(return_monthly(j));
     parfor i=1:N
         n = mean_std*randn(1,12)+mean_return;
+        % todo - add here the management costs
         z(i) = exp(sum(log(n)));
     end
-    figure;hist(z)
+    [a,b] = hist(z,100);
+    figure;
+    a = a/sum(a);
+    bar(b,a)
+    grid on;
+    xlabel('Return');
+    ylabel('Probability');
+    p0= sum(a(b<1));
+    title(['risk under zero - ',num2str(p0)]); % name,risk under 1
+    
 end
-
-
-
-%% todo - the approach shouldn't be estimating the median weights, but to estimate the covarince matrix C using different data!
-
-
-% todo - sepearate the data collection and read from the file of the
-% simulation
-% run a mointe carlo simulation for the minimum variance portfolio, and the
-% set return portfoilio...
-% more stocks

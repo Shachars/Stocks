@@ -11,13 +11,13 @@ clc;
 
 % don't forget to use the gpu!
 
-save_data_name = 'stocks_data7';
+save_data_name = 'stocks_data18';
 
 % list of stocks (todo - automatic?)
 % stock_list = {'^TA100'};
 % stock_list = {'^GSPC','^RUT','^STOXX50E','^N225','^GDAXI'};
-% stock_list = {'^TA25','^TA75','MSCI','^GSPC','^RUT','^STOXX50E','^N225','^IXIC','^GDAXI','^FTSE','^DJI','^HSI'};
-stock_list = {'^TA25','^TA75','MSCI','^GSPC','^RUT','^STOXX50E','^N225','^GDAXI','^FTSE','^DJI','^HSI'};
+stock_list = {'^TA25','^TA75','MSCI','^GSPC','^RUT','^STOXX50E','^N225','^IXIC','^GDAXI','^FTSE','^DJI','^HSI','STXX'};
+% stock_list = {'^TA75','MSCI','^GSPC','^FTSE','^DJI'};
 % stock_list = {'^TA25','^GSPC','^RUT','^GDAXI','^IXIC'};
 % stock_list = {'^TA75','GSPC'};
 Nstocks = length(stock_list);
@@ -29,7 +29,7 @@ stock_return = {};
 c = yahoo;
 
 % time frame
-years = 40;
+years = 60;
 start = now - (365.25*years);
 
 for iStock=1:nStocks
