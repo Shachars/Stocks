@@ -1,3 +1,12 @@
+%% Brute force portfolio selection
+
+
+% runBT(w,data,Cfg)
+
+Cfg.RB_rate
+Cfg.transaction_cost
+
+
 % This function will take the stocks
 
 % todo - cover and %25
@@ -102,71 +111,3 @@ for ii=1:N_division
 end
 
 figure;hist(mu_stocks1(:,8))
-% expectation distribution - heavy tail
-% Matrix norm
-
-if(0)
-    mu_stocks = mean(mu_stocks1);
-    % figure;hist(mu_stocks1(:,8),100)
-    
-    %% check the distribution of the returns and risks of each of the portfolios
-    
-    %% Minimum variance portfolio
-    w = max(ones(1,Nstocks)*inv(C),0);
-    data.stock_list
-    w_min_risk = w/sum(w)
-    return_min_risk = (mu_stocks*w_min_risk.')
-    std_min_risk = sqrt(w_min_risk*C*w_min_risk.')
-    %% Maximum Sharpe ratio portfoio
-    w = max((mu_stocks)*inv(C),0);
-    data.stock_list
-    w_max_sharpe = w/sum(w)
-    return_max_sharpe = (mu_stocks*w_max_sharpe.')
-    std_max_sharpe = sqrt(w_max_sharpe*C*w_max_sharpe.')
-    %% Minimum probability of loss (less than 1) portfoio
-    w = max((mu_stocks-1)*inv(C),0);
-    data.stock_list
-    w_mim_loss = w/sum(w)
-    return_mim_loss = (mu_stocks*w_mim_loss.')
-    std_mim_loss = sqrt(w_mim_loss*C*w_mim_loss.')
-    
-    %% Back-test the portfolio on the real data
-    % we can rebalance every T times
-    
-    % cross validation - learn the optimal protfolio based on one time
-    % interval and check on another
-    
-    % i can perform an optimal portfolio of each time inteval and then
-    % check the performance - see how different the weights are? - see the
-    % distrubuton of the final return for a specofic weight allocation
-    % we can also check on different time allocations - make it random!!!!
-    
-    % optimal capon robust for the mu
-    
-    % more stocks
-    
-    %% Compute the annual return for each portfolio based on Gaussian assumption
-    N = 1e6;
-    z = zeros(1,N);
-    risk = [std_min_risk,std_max_sharpe,std_mim_loss];
-    return_monthly = [return_min_risk,return_max_sharpe,return_mim_loss];
-    for j=1:3
-        mean_std = mean(risk(j));
-        mean_return = mean(return_monthly(j));
-        parfor i=1:N
-            n = mean_std*randn(1,12)+mean_return;
-            % todo - add here the management costs
-            z(i) = prod(n);
-        end
-        [a,overlap] = hist(z,100);
-        figure;
-        a = a/sum(a);
-        bar(overlap,a)
-        grid on;
-        xlabel('Yearly Return');
-        ylabel('Probability');
-        p0= sum(a(overlap<1));
-        title(['risk under zero - ',num2str(p0)]); % name,risk under 1
-        
-    end
-end

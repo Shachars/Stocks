@@ -11,7 +11,7 @@ clc;
 
 % don't forget to use the gpu!
 
-save_data_name = 'stocks_data18';
+save_data_name = 'stocks_data60_years';
 
 % list of stocks (todo - automatic?)
 % stock_list = {'^TA100'};
@@ -34,7 +34,7 @@ start = now - (365.25*years);
 
 for iStock=1:nStocks
     iStock
-    stock_data{iStock} = fetch(c,stock_list{iStock},'Close',start,now,'m');
+    stock_data{iStock} = fetch(c,stock_list{iStock},'Close',start,now,'d');
     %% plot the data
     aa = datevec(stock_data{iStock}(:,1));
     stock_return{iStock} = stock_data{iStock}(1:end-1,2)./stock_data{iStock}(2:end,2);
