@@ -1,22 +1,25 @@
 %% Rebalance portfolio script
 
 % Weigths
-w = [0.3,0.3,0.2,0.2];
+w = [0.75,0.25,0,0];
 if(sum(w)~=1)
     error('weigths do not sum to 1 ...');
 end
 
 % Asset price
-p = [140.55,151.85,1269.17,113.01]/100;
+p = [141.19,144.27,1088.18,113.03]/100;
+
+% Asset name
+names = {'MTF TLV 100','GOV Bond','Gold','MAKAM'};
 
 % Current portfolio composition
-m(1) = 18566.65;
-m(2) = 30370;
-m(3) = 0;
-m(4) = 0;
+m(1) = 29438.11;
+m(2) = 28854;
+m(3) = 16834.14;
+m(4) = 19553.06;
 
 % Added fund
-v = 50000;
+v = 2500;
 
 % new number of shares per asset
 r = round((v+sum(m)).*w./p);
@@ -32,9 +35,11 @@ disp(['New portfoio worth : ',num2str(v+sum(m))]);
 disp('******************************************');
 disp('******************************************');
 for i=1:length(p)
+    disp(['Asset: ',names{i}]);
     disp(['Asset with price = ',num2str(p(i))]);
     disp([num2str(r(i)),' shares']);
     disp(['Buy with ',num2str(d(i)),' Shekels']);
+    disp(['Buy ',num2str(d(i)/p(i)),' shares']);
     disp('------------------------------------------');
 end
 

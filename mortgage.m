@@ -7,7 +7,7 @@ clc;
 % todo - insert inflation and max and min (std) of the prime rate
 
 % Parameters
-Mortgage = 800e3;% Initial fund
+Mortgage = 500e3;% Initial fund
 Prime = 2.75; % Prime intrest rate [%]
 prime_minus = 1.00; % Prime minus rate [Precentage]
 ratio_fixed = 2/3;
